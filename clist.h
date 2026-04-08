@@ -2,13 +2,14 @@
 #define CLIST_H
     #include <stdio.h>
     #include <stdlib.h>
+    #include <string.h>
 
     // Python is an engineering marvel
 
     typedef struct{
         void** content;
-        int size;
-        int allocated;
+        size_t size;
+        size_t allocated;
     } List;
 
     // Checks if the ist hasn't gone out of bounds
@@ -33,7 +34,7 @@
             orientation[0] == 'l' ? i <= list->size : i >= 0;   
             orientation[0] == 'l' ? i++ : i-- // if it goes to the right, i--
         ){
-            if(i < *index && (*index != NULL || *index != -1)){
+            if(i < *index && *index != 0){
                 break;
             }
             if(orientation[0] == 'r'){
@@ -50,7 +51,7 @@
         list->size--;
     }
 
-    // Deletes a specific index and fixes it
+    // Deletes a specific index and reorganizes the list
     static inline void cherryPick(List* list, size_t index){
         list->content[index] = NULL;
         
@@ -60,11 +61,14 @@
     // Adds an item to the last position of the list
     static inline void append(List* list, void* obj){
         capCheck(list);
-        list->size++;
+        if(list->size != 0) list->size++;
+
         list->content[list->size] = obj;
+
+        if(list->size == 0) list->size++;
     }
 
-    // Inserts an item to the a specific index
+    // Inserts an item to a specific index
     static inline void insert(List* list, void* obj, size_t index){
         capCheck(list);
 
@@ -92,7 +96,9 @@
         list->size++;
     }
 
-    // create an empty list (Only compatible with string, byte, double, int, char, long, float and short)
+    //TODO: ERROR MANAGER
+
+    // creates an empty list
     static inline List createList(size_t size){
         List list;
         // Python style overallocation
@@ -104,18 +110,20 @@
             capacity = size + (size >> 2) + 6;
         }
         list.content = (void**)malloc(capacity * sizeof(void*)); // Crazy allocation
-        // Initialize all to NULL
-        for (size_t i = 0; i < capacity; i++) {
-            list.content[i] = NULL;
+        if(!list.content) {
+            list.size = 0;
+          list.allocated = 0;
         }
-        if(!list.content) return;
+
+        // Initialize all to NULL
+        memset(list.content, 0, capacity * sizeof(void*));
         list.size = 0;
         list.allocated = capacity;
         return list;
     }
 
     // Returns the length of the list
-    static inline int len(List* list){
-        return *list->size;
+    static inline size_t len(List* list){
+        return list->size;
     }
 #endif

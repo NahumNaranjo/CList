@@ -13,4 +13,4 @@ CList is a library designed to be like python's list and is part of the [CLearni
 - **len**: returns *list->size
 
 **Author - Nahum Naranjo**  
-**Version - 1.0.1**
+**Version - 1.0.2**
