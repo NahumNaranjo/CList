@@ -9,8 +9,6 @@
         void** content;
         int size;
         int allocated;
-        void (*append)(struct List* list, void* obj);
-        void (*pop)(struct List* list);
     } List;
 
     // Checks if the ist hasn't gone out of bounds
