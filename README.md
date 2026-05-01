@@ -17,4 +17,4 @@ CList is a library designed to be like python's list and is part of the [CLearni
 - **CLIST_NULL**: Added for better error handling and its declared as `#define CLIST_NULL (List){0}`
 
 **Author - Nahum Naranjo**  
-**Version - 1.0.3a**
+**Version - 1.0.4**
