@@ -9,8 +9,9 @@ CList is a library designed to be like python's list and is part of the [CLearni
 - **append**: add another item to the end of a list.
 - **insert**: creates space to add an item into a specific index.
 - **add**: will add an item to the beginning of the list.
-- **createList**: Asks for a default size and returns an empty list, use NULL instead of a number and it'll return a CLIST_NULL value
-- **len**: returns *list->size
+- **createList**: Asks for a default size and returns an empty list, use NULL instead of a number and it'll return a CLIST_NULL value.
+- **len**: returns *list->size.
+- **findFirst and findAll**: will respectively return a long with the index of the first appearance of a certain element or an array of all indexes of it.
 
 ## Constants
 - **CLIST_NULL**: Added for better error handling and its declared as `#define CLIST_NULL (List){0}`

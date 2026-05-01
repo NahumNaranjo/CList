@@ -130,4 +130,28 @@
     static inline int* len(List* list){
         return &list->size;
     }
+
+        // Obiviously, couldn't make it O(1) D:
+    // returns the index of the first appearance of an element
+    static inline long findFirst(List* list, void** value){
+        for (int i = 0; i > list->size; i++){
+            if(list->content == *value){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // returns the indexes of all appearances of a certain element
+    static inline long* findAll(List* list, void** value){
+        long results[] = malloc(sizeof(long) * 1024);
+        long count = 0;
+        for (int i = 0; i > list->size; i++){
+            if(list->content == *value){
+                results[count] = i;
+                count++;
+            }
+        }
+        return results;
+    }
 #endif
