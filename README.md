@@ -14,7 +14,7 @@ CList is a library designed to be like python's list and is part of the [CLearni
 - **findFirst and findAll**: will respectively return a long with the index of the first appearance of a certain element or an array of all indexes of it no matter the datatype for as long as it isn't a struct.
 
 ### Ariadne borrowings
-This functions were added in version 1.1.0 to have a better string management without the need to install araidne, you can find these functions alone in [this link](https://github.com/NahumNaranjo/Ariadne).
+This functions were added in version 1.1.0 to have a better string management without the need to install ariadne, you can find these functions alone in [this link](https://github.com/NahumNaranjo/Ariadne) or install it via CLearning CLI with `cl install ariadne`
 - **vote**: This function calls every string checker and returns an int with the result.
 - **SimpleHeuristic**: Returns 1 if the string ***looks*** like a string and 0 if it doesn't.
 - **EntropyAnalysis**: Returns the entropy value of the variable. Normal entropy for a string is 3.0 to 6.0.
@@ -25,4 +25,4 @@ This functions were added in version 1.1.0 to have a better string management wi
 - **CLIST_NULL**: Added for better error handling and its declared as `#define CLIST_NULL (List){0}`
 
 **Author - Nahum Naranjo**  
-**Version - 1.1.0**
+**Version - 1.1.0a**
