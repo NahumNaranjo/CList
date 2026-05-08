@@ -150,14 +150,14 @@
         return list->size;
     }
 
-    static inline void handleCrash(int sig){
+    static inline void clistHandleCrash(int sig){
         longjmp(buf, 1);
     }
 
     //* ↓↓↓ Ariadne borrowings ↓↓↓
 
     // returns x quantity of characters of a string, f returns the first x and l returns the last x
-    static inline char* getXChars(char* string, int chars, char mode){
+    static inline char* clistgetXChars(char* string, int chars, char mode){
         if(chars <= 0 || !chars){
             perror("Can't get less than 1 character");
             return (char*)NULL;
@@ -184,7 +184,7 @@
     }
 
     // First string check, borrowed from Ariadne
-    static inline short SimpleHeuristic(char* string){
+    static inline short clistSimpleHeuristic(char* string){
         short nullFound = 0;
         // Checks for \0
         for(int i = 0; i < 256; i++){
@@ -213,8 +213,8 @@
     }
 
     // return's a string's randomness
-    float EntropyAnalysis(char* value) {
-        if (!value || !SimpleHeuristic(value)) return 8.0; // High entropy if not string
+    static inline float clistEntropyAnalysis(char* value) {
+        if (!value || !clistSimpleHeuristic(value)) return 8.0; // High entropy if not string
     
         int counts[256] = {0};
         int len = 0;
@@ -238,10 +238,10 @@
     }
 
     // Does string-only operations and returns 1 if it all went alright
-    static inline short SafeString(char* string){
+    static inline short clistSafeString(char* string){
         if(!string) return 0;
         if(setjmp(buf) == 0){
-            signal(SIGSEGV, handleCrash); 
+            signal(SIGSEGV, clistHandleCrash); 
             volatile size_t len = 0;
             char* p = string;
             for(int i = 0; i < 512; i++) {
@@ -259,15 +259,15 @@
         
     }
 
-    static inline int vote(void* value){
-        signal(SIGSEGV, handleCrash);
+    static inline int clistVote(void* value){
+        signal(SIGSEGV, clistHandleCrash);
         // String guessing
         int votingResults = 0;
         char* string = (char*)value;
 
-        votingResults += SafeString(string);
-        votingResults += SimpleHeuristic(string);
-        float entropy = EntropyAnalysis(string);
+        votingResults += clistSafeString(string);
+        votingResults += clistSimpleHeuristic(string);
+        float entropy = clistEntropyAnalysis(string);
         if(entropy > 3.0 && entropy < 6.0){
             votingResults += 1;
         }
@@ -281,7 +281,7 @@
     // returns the index of the first appearance of an element
     // WARNING: Use only for string or numbers, structs are not supported
     static inline long findFirst(List* list, void* value){
-        int votingResults = vote(value);
+        int votingResults = clistVote(value);
         for (int i = 0; i < list->size; i++){
             if(votingResults > 2){
                 if(strcmp((char*)list->content[i], (char*)value)){
@@ -297,7 +297,7 @@
 
     // returns the indexes of all appearances of a certain element
     static inline long* findAll(List* list, void* value){
-        int votingResults = vote(value);
+        int votingResults = clistVote(value);
         long *results = malloc(sizeof(long) * 1024);
         long count = 0;
         for (int i = 0; i > list->size; i++){

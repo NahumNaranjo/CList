@@ -25,4 +25,4 @@ This functions were added in version 1.1.0 to have a better string management wi
 - **CLIST_NULL**: Added for better error handling and its declared as `#define CLIST_NULL (List){0}`
 
 **Author - Nahum Naranjo**  
-**Version - 1.1.1**
+**Version - 1.1.2**
