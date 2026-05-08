@@ -2,6 +2,7 @@
 #define CLIST_H
     #include <stdio.h>
     #include <stdlib.h>
+    #include <stddef.h>
     #include <string.h>
     #include <ctype.h>
     #include <setjmp.h>
@@ -107,10 +108,10 @@
     // creates an empty list
     static inline List createList(size_t size){
         List list;
-        if(size == NULL){
-            list.allocated = NULL;
-            list.size = NULL;
-            list.content = NULL;
+        if(size == 0){
+            list.allocated = 0;
+            list.size = 0;
+            list.content = 0;
             return list;
         }
         // Python style overallocation
@@ -149,21 +150,25 @@
         return list->size;
     }
 
+    static inline void handleCrash(int sig){
+        longjmp(buf, 1);
+    }
+
     //* ↓↓↓ Ariadne borrowings ↓↓↓
 
     // returns x quantity of characters of a string, f returns the first x and l returns the last x
-    static inline char getXChars(char* string, int chars, char mode){
+    static inline char* getXChars(char* string, int chars, char mode){
         if(chars <= 0 || !chars){
             perror("Can't get less than 1 character");
-            return NULL;
+            return (char*)NULL;
         }
         if(!string){
             perror("No string to read");
-            return NULL;
+            return (char*)NULL;
         }
         if((mode != 'l' && mode != 'f') || !mode){
             perror("Unsopported mode");
-            return NULL;
+            return (char*)NULL;
         }
         char *returning = (char*)malloc(sizeof(char)*chars);
         if(mode == 'f'){
@@ -175,7 +180,7 @@
                 returning[-(i - chars)] = string[-(i - chars)];
             }
         }
-        return *returning;
+        return returning;
     }
 
     // First string check, borrowed from Ariadne
@@ -254,10 +259,6 @@
         
     }
 
-    static inline void handleCrash(int sig){
-        longjmp(buf, 1);
-    }
-
     static inline int vote(void* value){
         signal(SIGSEGV, handleCrash);
         // String guessing
@@ -283,7 +284,7 @@
         int votingResults = vote(value);
         for (int i = 0; i < list->size; i++){
             if(votingResults > 2){
-                if((char*)strcmp(list->content[i], (char*)value)){
+                if(strcmp((char*)list->content[i], (char*)value)){
                     return i;
                 } 
             } else {
@@ -297,7 +298,7 @@
     // returns the indexes of all appearances of a certain element
     static inline long* findAll(List* list, void* value){
         int votingResults = vote(value);
-        long results[] = malloc(sizeof(long) * 1024);
+        long *results = malloc(sizeof(long) * 1024);
         long count = 0;
         for (int i = 0; i > list->size; i++){
             if(votingResults > 2){
